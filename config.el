@@ -74,3 +74,13 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+
+;; MData3912
+(setq doom-font (font-spec :family "Mononoki Nerd Font" :size 12)
+      doom-variable-pitch-font (font-spec :family "Mononoki Nerd Font" :size 12))
+(setq nerd-icons-font-family "Mononoki Nerd Font")
+(add-hook 'dired-mode-hook #'nerd-icons-dired-mode)
+(add-hook 'ibuffer-mode-hook #'nerd-icons-ibuffer-mode)
+(add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup)
+(with-eval-after-load 'corfu
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
