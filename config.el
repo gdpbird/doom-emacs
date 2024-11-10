@@ -75,12 +75,60 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-;; MData3912
+;; mdata3912 ;;
+;;
+;; doom-font ;;
+;;
 (setq doom-font (font-spec :family "Mononoki Nerd Font" :size 12)
       doom-variable-pitch-font (font-spec :family "Mononoki Nerd Font" :size 12))
+;;
+;; nerd-font ;;
+;;
 (setq nerd-icons-font-family "Mononoki Nerd Font")
 (add-hook 'dired-mode-hook #'nerd-icons-dired-mode)
 (add-hook 'ibuffer-mode-hook #'nerd-icons-ibuffer-mode)
 (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup)
 (with-eval-after-load 'corfu
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+;;
+;; beacon ;;
+;;
+(beacon-mode 1)
+;;
+;; dired ;;
+;;
+;; dired#delete-by-moving-to-trash ;;
+;;
+;; Windows shared folder report error:
+;; file-error: Copying permissions to: Operation not permitted, /home/md/mdata3912-trash/1.txt.~1~
+;(setq! delete-by-moving-to-trash t
+;       trash-directory "~/mdata3912-trash")
+(setq! delete-by-moving-to-trash t
+       trash-directory "/tmp")
+;;
+;; dired#dirvish ;;
+;;
+(after! dirvish
+  (setq! dirvish-quick-access-entries
+         `(("h" "~/"                           "~")
+           ("m" "~/mdata3912"                  "mdata3912")
+           ("t" "~/mdata3912-tmp"              "mdata3912-tmp")
+           ("r" "~/mdata3912-trash"            "trash")
+           ("e" "~/.emacs.d"                   "emacs-d")
+           ("d" "~/.doom.d"                    "doom-d"))))
+;;
+;; dired#peep-dired ;;
+;;
+(evil-define-key 'normal peep-dired-mode-map
+  (kbd "j") 'peep-dired-next-file
+  (kbd "k") 'peep-dired-prev-file)
+(add-hook 'peep-dired-hook 'evil-normalize-keymaps)
+;; Add the key binding SPC d p to toggle peep-dired-mode while in dired (you can add the key binding you like)
+(map! :leader
+       (:prefix ("d" . "dired")
+        :desc "Open dired" "d" #'dired
+        :desc "Dired jump to current" "j" #'dired-jump)
+       (:after dired
+        (:map dired-mode-map
+         :desc "Peep-dired image preview" "d p" #'peep-dired
+         :desc "Dired view file" "d v" #'dired-view-file)))
